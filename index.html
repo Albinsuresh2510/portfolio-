@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albin Suresh - Java Full-Stack Developer</title>
+    <!-- Tailwind CSS CDN for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#00aaff', /* Your accent blue */
+                        darkbg: '#0c0c16', /* Dark background inspired by your image */
+                        cardbg: 'rgba(25, 25, 35, 0.7)', /* Slightly lighter, semi-transparent for content cards */
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Apply Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #0c0c16; /* Fallback for very old browsers or if JS fails */
+        }
+
+        /* Three.js Canvas Container - Full screen and fixed position */
+        #threejs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Place it behind your main content */
+            background-color: #0c0c16; /* Ensure dark background for the 3D scene */
+        }
+
+        canvas {
+            display: block; /* Removes extra space below canvas */
+        }
+
+        /* Main Portfolio Content - Stacked on top of the 3D scene */
+        #portfolio-content {
+            position: relative; /* Allows z-index to work */
+            z-index: 1; /* Place it above the Three.js container */
+            color: #ffffff; /* Default text color for visibility */
+            /* backdrop-filter: blur(5px); /* Optional: blur the 3D background slightly */
+            /* background-color: rgba(0, 0, 0, 0.4); /* Optional: semi-transparent background for readability */
+        }
+
+        /* Custom scroll behavior for smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Adjust scrollbar for aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e; /* Dark track */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00aaff; /* Accent color thumb */
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0088cc;
+        }
+
+        /* Custom glow effect for hero image/element, inspired by your image */
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.6), 0 0 30px rgba(0, 170, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        .glow-effect:hover {
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.8), 0 0 40px rgba(0, 170, 255, 0.6);
+        }
+    </style>
+</head>
+<body class="font-inter bg-darkbg">
+
+    <!-- Three.js Canvas Container -->
+    <div id="threejs-container"></div>
+
+    <!-- Main Portfolio Content -->
+    <div id="portfolio-content" class="min-h-screen">
+        <!-- Header & Navigation -->
+        <header class="fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 bg-darkbg bg-opacity-80 backdrop-blur-sm shadow-lg">
+            <nav class="container mx-auto flex justify-between items-center">
+                <a href="#home" class="text-2xl font-bold text-primary"></a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#home" class="text-white hover:text-primary transition-colors text-lg">Home</a>
+                    <a href="#about" class="text-white hover:text-primary transition-colors text-lg">About</a>
+                    <a href="#skills" class="text-white hover:text-primary transition-colors text-lg">Skills</a>
+                    <a href="#projects" class="text-white hover:text-primary transition-colors text-lg">Projects</a>
+                    <a href="#contact" class="text-white hover:text-primary transition-colors text-lg">Contact</a>
+                </div>
+                <!-- Mobile Menu Button (Hamburger) -->
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </nav>
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="md:hidden hidden bg-darkbg bg-opacity-90 py-4 mt-4 rounded-lg shadow-xl">
+                <a href="#home" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Home</a>
+                <a href="#about" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">About</a>
+                <a href="#skills" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Skills</a>
+                <a href="#projects" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Projects</a>
+                <a href="#contact" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Contact</a>
+            </div>
+        </header>
+
+        <!-- Home Section (Hero) -->
+        <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 pb-10 md:pt-0 md:pb-0 px-6 md:px-12">
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-10">
+                <div class="max-w-2xl">
+                    <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 animate-fade-in-up text-white">
+                        Hello, It's Me<br><span class="text-primary">Albin Suresh</span>
+                    </h2>
+                    <p class="text-2xl md:text-3xl font-semibold mb-6 animate-fade-in-up delay-200 text-gray-300">
+                        And I'm a <span class="text-white">Java Full-Stack Developer</span>
+                    </p>
+                    <p class="text-lg md:text-xl text-gray-400 mb-8 animate-fade-in-up delay-400">
+                        Passionate about coding real-world apps and growing as a full-stack developer.
+                    </p>
+                    <div class="flex justify-center md:justify-start space-x-4 animate-fade-in-up delay-600">
+                        <a href="https://github.com/Albinsuresh2510" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition-colors text-3xl">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/albin-suresh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition-colors text-3xl">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <!-- Add other social links as needed -->
+                    </div>
+                    <a href="#contact" class="inline-block mt-10 px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-lg glow-effect animate-fade-in-up delay-800">
+                        Contact Me
+                    </a>
+                </div>
+                <div class="md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0 animate-fade-in-right">
+                    <img src="download.jpeg"alt="Albin Suresh Profile Picture" class="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-primary glow-effect">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 px-6 md:px-12 bg-cardbg rounded-lg shadow-xl my-20 container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">About <span class="text-primary">Me</span></h2>
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <div class="md:w-1/3 flex justify-center md:justify-start">
+                    <img src="download.jpeg" alt="About Albin Suresh" class="rounded-full w-56 h-56 md:w-64 md:h-64 object-cover border-4 border-primary glow-effect">
+                </div>
+                <div class="md:w-2/3 text-center md:text-left">
+                    <h3 class="text-3xl font-semibold mb-4 text-primary">Java Full-Stack Enthusiast!</h3>
+                    <p class="text-lg text-gray-300 leading-relaxed mb-6">
+                        Hello! I'm Albin Suresh, a Java full-stack enthusiast from Kottayam, Kerala. My journey into development began with a Diploma in Computer Engineering, which provided me with a strong foundation in programming, software development, and computer systems. I'm currently expanding my expertise through a Full Stack Web Development Training, focusing on Java, Spring Boot, Angular, HTML, CSS, and JavaScript.
+                    </p>
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        I'm passionate about building real-world applications, as demonstrated by my projects like "Resumify" (a full-stack resume parser) and a "Mini Banking System". I thrive in team environments, eager to apply my skills and grow as a developer. My goal is to create impactful and user-friendly web solutions.
+                    </p>
+                    <a href="ALBIN SURESH.pdf" download class="inline-block mt-8 px-6 py-3 bg-primary text-white text-md font-semibold rounded-full hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-lg">
+                        Download My CV
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 px-6 md:px-12 container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">My <span class="text-primary">Skills</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Languages -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-code mr-3"></i>Languages</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Java</li>
+                        <li>C</li>
+                        <li>JavaScript (Basic)</li>
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                        <li>C++</li>
+                    </ul>
+                </div>
+                <!-- Backend -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-server mr-3"></i>Backend & Frameworks</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Spring Boot (Basic)</li>
+                        <li>REST API (Basic)</li>
+                        <li>Angular (Basic)</li>
+                    </ul>
+                </div>
+                <!-- Tools & Platforms -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-tools mr-3"></i>Tools & Platforms</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Git</li>
+                        <li>GitHub</li>
+                        <li>Postman</li>
+                        <li>Android Studio (Basic)</li>
+                        <li>VS Code</li>
+                    </ul>
+                </div>
+                <!-- Database -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-database mr-3"></i>Database</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>MySQL</li>
+                    </ul>
+                </div>
+                <!-- Soft Skills -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-users mr-3"></i>Soft Skills</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Time Management</li>
+                        <li>Problem Solving</li>
+                        <li>Team Collaboration</li>
+                        <li>Adaptability</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 px-6 md:px-12 bg-cardbg rounded-lg shadow-xl my-20 container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Latest <span class="text-primary">Projects</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1: Resumify -->
+                <div class="bg-darkbg rounded-lg shadow-xl overflow-hidden hover:shadow-primary/30 transition-shadow transform hover:-translate-y-2">
+                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Resumify+Project" alt="Resumify Project" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold text-primary mb-2">Resumify</h3>
+                        <p class="text-gray-300 text-sm mb-4">May 2025 - June 2025</p>
+                        <p class="text-gray-400 text-base leading-relaxed mb-4">
+                            Built a full-stack system to extract name, email, phone, skills, and experience from PDF resumes. Integrated Angular UI with Spring Boot backend and MySQL. Enabled filtering and sorting of candidates.
+                        </p>
+                        <a href="https://github.com/Albinsuresh2510/Resumify" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-white font-semibold text-sm flex items-center">
+                            View Project on GitHub <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Project 2: Mini Banking System -->
+                <div class="bg-darkbg rounded-lg shadow-xl overflow-hidden hover:shadow-primary/30 transition-shadow transform hover:-translate-y-2">
+                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Mini+Banking+Project" alt="Mini Banking System Project" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold text-primary mb-2">Mini Banking System</h3>
+                        <p class="text-gray-300 text-sm mb-4">May 2025 - May 2025</p>
+                        <p class="text-gray-400 text-base leading-relaxed mb-4">
+                            Developed a CLI-based banking application using Java and MySQL, featuring deposit, withdrawal, and balance check functionalities. Applied OOP concepts and robust error handling.
+                        </p>
+                        <a href="https://github.com/Albinsuresh2510/Mini-Bank-Project-Java" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-white font-semibold text-sm flex items-center">
+                            View Project on GitHub <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Add more project cards as needed -->
+                <div class="bg-darkbg rounded-lg shadow-xl overflow-hidden hover:shadow-primary/30 transition-shadow transform hover:-translate-y-2">
+                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Coming+Soon" alt="Placeholder Project" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold text-primary mb-2">Your Next Project</h3>
+                        <p class="text-gray-300 text-sm mb-4">Ongoing</p>
+                        <p class="text-gray-400 text-base leading-relaxed mb-4">
+                            Exciting new projects are always in the pipeline! This space is reserved for my next impactful creation. Stay tuned for updates!
+                        </p>
+                        <a href="#" class="text-primary hover:text-white font-semibold text-sm flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-6 md:px-12 container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Contact <span class="text-primary">Me</span></h2>
+            <div class="bg-cardbg p-8 rounded-lg shadow-xl max-w-2xl mx-auto">
+                <form class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-lg font-medium text-gray-200 mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="w-full p-3 rounded-md bg-darkbg border border-gray-600 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 text-white" placeholder="Your Name" required>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-lg font-medium text-gray-200 mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="w-full p-3 rounded-md bg-darkbg border border-gray-600 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 text-white" placeholder="your.email@example.com" required>
+                    </div>
+                    <div>
+                        <label for="message" class="block text-lg font-medium text-gray-200 mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="w-full p-3 rounded-md bg-darkbg border border-gray-600 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 text-white" placeholder="Your message..." required></textarea>
+                    </div>
+                    <button type="submit" class="w-full px-6 py-3 bg-primary text-white text-lg font-semibold rounded-full hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-lg glow-effect">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Albin Suresh. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Font Awesome for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+    <!-- Three.js Library -->
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+        let scene, camera, renderer, particles;
+        let particleCount = 15000; // More particles for a denser effect
+        let positions = new Float32Array(particleCount * 3);
+        let velocities = new Float32Array(particleCount * 3);
+        let accelerations = new Float32Array(particleCount * 3);
+
+        function init() {
+            // 1. Scene
+            scene = new THREE.Scene();
+
+            // 2. Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 10; // Pull camera back slightly for a wider view
+
+            // 3. Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); // Improve clarity on high-DPI screens
+            document.getElementById('threejs-container').appendChild(renderer.domElement);
+
+            // 4. Create Particles
+            const geometry = new THREE.BufferGeometry();
+            const material = new THREE.PointsMaterial({
+                color: 0x00aaff, // Primary blue accent color
+                size: 0.05,      // Slightly larger particles
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.7
+            });
+
+            // Populate particle positions, velocities, and small random accelerations
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                // Distribute particles randomly within a larger box
+                positions[i] = (Math.random() * 2 - 1) * 20; // x
+                positions[i + 1] = (Math.random() * 2 - 1) * 20; // y
+                positions[i + 2] = (Math.random() * 2 - 1) * 20; // z
+
+                // Initial random velocities
+                velocities[i] = (Math.random() - 0.5) * 0.01;
+                velocities[i + 1] = (Math.random() - 0.5) * 0.01;
+                velocities[i + 2] = (Math.random() - 0.5) * 0.01;
+
+                // Small random accelerations for a more organic movement
+                accelerations[i] = (Math.random() - 0.5) * 0.0001;
+                accelerations[i + 1] = (Math.random() - 0.5) * 0.0001;
+                accelerations[i + 2] = (Math.random() - 0.5) * 0.0001;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // Add ambient light for overall scene visibility if adding other objects later
+            const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
+            scene.add(ambientLight);
+
+            // Handle window resizing
+            window.addEventListener('resize', onWindowResize, false);
+
+            // Start animation loop
+            animate();
+        }
+
+        // Handle window resize to update camera and renderer
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Animation loop for particles
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update particle positions based on velocity and acceleration
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                // Apply acceleration to velocity
+                velocities[i] += accelerations[i];
+                velocities[i + 1] += accelerations[i + 1];
+                velocities[i + 2] += accelerations[i + 2];
+
+                // Apply simple damping to velocities to prevent them from growing infinitely
+                velocities[i] *= 0.99;
+                velocities[i + 1] *= 0.99;
+                velocities[i + 2] *= 0.99;
+
+                // Update position
+                positions[i] += velocities[i];
+                positions[i + 1] += velocities[i + 1];
+                positions[i + 2] += velocities[i + 2];
+
+                // Boundary check: if a particle goes too far, reset its position to the opposite side
+                // This creates a continuous, looping effect
+                const boundary = 20; // Size of the bounding box
+                if (positions[i] > boundary) positions[i] = -boundary;
+                else if (positions[i] < -boundary) positions[i] = boundary;
+
+                if (positions[i + 1] > boundary) positions[i + 1] = -boundary;
+                else if (positions[i + 1] < -boundary) positions[i + 1] = boundary;
+
+                if (positions[i + 2] > boundary) positions[i + 2] = -boundary;
+                else if (positions[i + 2] < -boundary) positions[i + 2] = boundary;
+            }
+            particles.geometry.attributes.position.needsUpdate = true; // Crucial: Tell Three.js to update vertex positions
+
+            // Optional: Rotate the particle system slightly for added dynamism
+            particles.rotation.y += 0.0001;
+            particles.rotation.x += 0.00005;
+
+            renderer.render(scene, camera);
+        }
+
+        // Initialize the Three.js scene when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Mobile menu toggle logic
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+    </script>
+</body>
+</html>
