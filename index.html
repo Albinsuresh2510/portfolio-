@@ -50,8 +50,6 @@
             position: relative; /* Allows z-index to work */
             z-index: 1; /* Place it above the Three.js container */
             color: #ffffff; /* Default text color for visibility */
-            /* backdrop-filter: blur(5px); /* Optional: blur the 3D background slightly */
-            /* background-color: rgba(0, 0, 0, 0.4); /* Optional: semi-transparent background for readability */
         }
 
         /* Custom scroll behavior for smooth scrolling */
@@ -85,6 +83,63 @@
         .glow-effect:hover {
             box-shadow: 0 0 20px rgba(0, 170, 255, 0.8), 0 0 40px rgba(0, 170, 255, 0.6);
         }
+
+        /* Keyframes for hero section elements animation on load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Apply animations to hero section elements */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0; /* Ensures starting state is hidden before animation */
+        }
+        .animate-fade-in-up.delay-200 { animation-delay: 0.2s; }
+        .animate-fade-in-up.delay-400 { animation-delay: 0.4s; }
+        .animate-fade-in-up.delay-600 { animation-delay: 0.6s; }
+        .animate-fade-in-up.delay-800 { animation-delay: 0.8s; }
+
+        .animate-fade-in-right {
+            animation: fadeInRight 0.8s ease-out forwards;
+            opacity: 0; /* Ensures starting state is hidden before animation */
+        }
+
+
+        /* Fade-in animation for subsequent sections as they come into view (controlled by JS) */
+        .animate-fade-in-section {
+            opacity: 0; /* Start hidden */
+            transform: translateY(20px); /* Start slightly below */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smooth transition */
+        }
+
+        /* Class added by JavaScript when section is in view */
+        .animate-fade-in-section.is-visible {
+            opacity: 1 !important; /* Ensures it overrides initial hidden state */
+            transform: translateY(0) !important; /* Ensures it overrides initial transformed state */
+        }
+
+        /* Fixed header compensation for scroll-to-sections using CSS */
+        section[id] {
+            scroll-margin-top: 5rem; /* Adjust this value based on your header's actual height + a small buffer */
+        }
     </style>
 </head>
 <body class="font-inter bg-darkbg">
@@ -95,14 +150,15 @@
     <!-- Main Portfolio Content -->
     <div id="portfolio-content" class="min-h-screen">
         <!-- Header & Navigation -->
-        <header class="fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 bg-darkbg bg-opacity-80 backdrop-blur-sm shadow-lg">
+        <header class="fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 bg-darkbg bg-opacity-80 backdrop-blur-sm shadow-lg" id="main-header">
             <nav class="container mx-auto flex justify-between items-center">
-                <a href="#home" class="text-2xl font-bold text-primary"></a>
+                <a href="#home" class="text-2xl font-bold text-primary">ALBIN SURESH</a>
                 <div class="hidden md:flex space-x-6">
                     <a href="#home" class="text-white hover:text-primary transition-colors text-lg">Home</a>
                     <a href="#about" class="text-white hover:text-primary transition-colors text-lg">About</a>
                     <a href="#skills" class="text-white hover:text-primary transition-colors text-lg">Skills</a>
                     <a href="#projects" class="text-white hover:text-primary transition-colors text-lg">Projects</a>
+                    <a href="#education" class="text-white hover:text-primary transition-colors text-lg">Education</a>
                     <a href="#contact" class="text-white hover:text-primary transition-colors text-lg">Contact</a>
                 </div>
                 <!-- Mobile Menu Button (Hamburger) -->
@@ -118,6 +174,7 @@
                 <a href="#about" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">About</a>
                 <a href="#skills" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Skills</a>
                 <a href="#projects" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Projects</a>
+                <a href="#education" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Education</a>
                 <a href="#contact" class="block px-4 py-2 text-white hover:bg-primary hover:text-darkbg transition-colors rounded-md text-lg">Contact</a>
             </div>
         </header>
@@ -130,7 +187,7 @@
                         Hello, It's Me<br><span class="text-primary">Albin Suresh</span>
                     </h2>
                     <p class="text-2xl md:text-3xl font-semibold mb-6 animate-fade-in-up delay-200 text-gray-300">
-                        And I'm a <span class="text-white">Java Full-Stack Developer</span>
+                        And I'm a <span class="text-white">Java Full-Stack Enthusiast</span>
                     </p>
                     <p class="text-lg md:text-xl text-gray-400 mb-8 animate-fade-in-up delay-400">
                         Passionate about coding real-world apps and growing as a full-stack developer.
@@ -149,17 +206,18 @@
                     </a>
                 </div>
                 <div class="md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0 animate-fade-in-right">
-                    <img src="download.jpeg"alt="Albin Suresh Profile Picture" class="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-primary glow-effect">
+                    <img src="download.jpeg" alt="Albin Suresh Profile Picture" class="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-primary glow-effect" onerror="this.onerror=null; this.src='https://placehold.co/400x400/00aaff/ffffff?text=Your+Profile';">
                 </div>
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 px-6 md:px-12 bg-cardbg rounded-lg shadow-xl my-20 container mx-auto">
+        <section id="about" class="py-20 px-6 md:px-12 bg-cardbg rounded-lg shadow-xl my-20 container mx-auto opacity-0 transform translate-y-10 animate-fade-in-section">
             <h2 class="text-4xl font-bold text-center mb-12 text-white">About <span class="text-primary">Me</span></h2>
             <div class="flex flex-col md:flex-row items-center gap-10">
                 <div class="md:w-1/3 flex justify-center md:justify-start">
-                    <img src="download.jpeg" alt="About Albin Suresh" class="rounded-full w-56 h-56 md:w-64 md:h-64 object-cover border-4 border-primary glow-effect">
+                    <!-- About image from Unsplash, with blue fallback -->
+                    <img src="download.jpeg" alt="About Albin Suresh" class="rounded-full w-56 h-56 md:w-64 md:h-64 object-cover border-4 border-primary glow-effect" onerror="this.onerror=null; this.src='https://placehold.co/300x300/00aaff/ffffff?text=Albin+Suresh';">
                 </div>
                 <div class="md:w-2/3 text-center md:text-left">
                     <h3 class="text-3xl font-semibold mb-4 text-primary">Java Full-Stack Enthusiast!</h3>
@@ -169,6 +227,7 @@
                     <p class="text-lg text-gray-300 leading-relaxed">
                         I'm passionate about building real-world applications, as demonstrated by my projects like "Resumify" (a full-stack resume parser) and a "Mini Banking System". I thrive in team environments, eager to apply my skills and grow as a developer. My goal is to create impactful and user-friendly web solutions.
                     </p>
+                    <!-- Link to your CV file. Ensure 'ALBIN SURESH.pdf' is in the same directory. -->
                     <a href="ALBIN SURESH.pdf" download class="inline-block mt-8 px-6 py-3 bg-primary text-white text-md font-semibold rounded-full hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-lg">
                         Download My CV
                     </a>
@@ -177,13 +236,13 @@
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-20 px-6 md:px-12 container mx-auto">
+        <section id="skills" class="py-20 px-6 md:px-12 container mx-auto opacity-0 transform translate-y-10 animate-fade-in-section">
             <h2 class="text-4xl font-bold text-center mb-12 text-white">My <span class="text-primary">Skills</span></h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Languages -->
                 <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
                     <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-code mr-3"></i>Languages</h3>
-                    <ul class="list-disc list-inside text-lg text-gray-300">
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
                         <li>Java</li>
                         <li>C</li>
                         <li>JavaScript (Basic)</li>
@@ -195,7 +254,7 @@
                 <!-- Backend -->
                 <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
                     <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-server mr-3"></i>Backend & Frameworks</h3>
-                    <ul class="list-disc list-inside text-lg text-gray-300">
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
                         <li>Spring Boot (Basic)</li>
                         <li>REST API (Basic)</li>
                         <li>Angular (Basic)</li>
@@ -204,7 +263,7 @@
                 <!-- Tools & Platforms -->
                 <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
                     <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-tools mr-3"></i>Tools & Platforms</h3>
-                    <ul class="list-disc list-inside text-lg text-gray-300">
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
                         <li>Git</li>
                         <li>GitHub</li>
                         <li>Postman</li>
@@ -215,14 +274,14 @@
                 <!-- Database -->
                 <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
                     <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-database mr-3"></i>Database</h3>
-                    <ul class="list-disc list-inside text-lg text-gray-300">
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
                         <li>MySQL</li>
                     </ul>
                 </div>
                 <!-- Soft Skills -->
                 <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
                     <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-users mr-3"></i>Soft Skills</h3>
-                    <ul class="list-disc list-inside text-lg text-gray-300">
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
                         <li>Time Management</li>
                         <li>Problem Solving</li>
                         <li>Team Collaboration</li>
@@ -233,12 +292,13 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-20 px-6 md:px-12 bg-cardbg rounded-lg shadow-xl my-20 container mx-auto">
+        <section id="projects" class="py-20 px-6 md:px-12 bg-cardbg rounded-lg shadow-xl my-20 container mx-auto opacity-0 transform translate-y-10 animate-fade-in-section">
             <h2 class="text-4xl font-bold text-center mb-12 text-white">Latest <span class="text-primary">Projects</span></h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Project 1: Resumify -->
                 <div class="bg-darkbg rounded-lg shadow-xl overflow-hidden hover:shadow-primary/30 transition-shadow transform hover:-translate-y-2">
-                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Resumify+Project" alt="Resumify Project" class="w-full h-48 object-cover">
+                    <!-- Project image with blue fallback -->
+                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Resumify+Project" alt="Resumify Project" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/00aaff/ffffff?text=Resumify+Project';">
                     <div class="p-6">
                         <h3 class="text-2xl font-semibold text-primary mb-2">Resumify</h3>
                         <p class="text-gray-300 text-sm mb-4">May 2025 - June 2025</p>
@@ -252,7 +312,8 @@
                 </div>
                 <!-- Project 2: Mini Banking System -->
                 <div class="bg-darkbg rounded-lg shadow-xl overflow-hidden hover:shadow-primary/30 transition-shadow transform hover:-translate-y-2">
-                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Mini+Banking+Project" alt="Mini Banking System Project" class="w-full h-48 object-cover">
+                    <!-- Project image with blue fallback -->
+                    <img src="https://placehold.co/600x400/00aaff/ffffff?text=Mini+Banking+Project" alt="Mini Banking System Project" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/00aaff/ffffff?text=Mini+Banking+Project';">
                     <div class="p-6">
                         <h3 class="text-2xl font-semibold text-primary mb-2">Mini Banking System</h3>
                         <p class="text-gray-300 text-sm mb-4">May 2025 - May 2025</p>
@@ -280,11 +341,53 @@
                 </div>
             </div>
         </section>
+        <!-- Education Section (New) -->
+        <section id="education" class="py-20 px-6 md:px-12 container mx-auto opacity-0 transform translate-y-10 animate-fade-in-section">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">My <span class="text-primary">Education</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Diploma in Computer Engineering -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-graduation-cap mr-3"></i>Diploma Computer Engineering</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+                        <li>Government Polytechnic College Purapuzha, Kerala</li>
+                        <li>Year: 2024 (8.39 CGPA)</li>
+                        <li>Currently learning Java and C programming with a focus on core logic and syntax.</li>
+                        <li>Familiar with basic computer operations including typing, file handling, and system navigation.</li>
+                        <li>Eager to grow in a team environment and apply skills in practical scenarios.</li>
+                    </ul>
+                </div>
+                <!-- Full Stack Web Development Training -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-laptop-code mr-3"></i>Full Stack Web Development Training</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+                        <li>DDUGKY Kerala, Trivandrum</li>
+                        <li>Year: 2025</li>
+                        <li>Currently learning Java, Spring Boot, Angular, HTML, CSS, and basic JavaScript.</li>
+                    </ul>
+                </div>
+                <!-- Certifications -->
+                <div class="bg-cardbg p-8 rounded-lg shadow-xl hover:shadow-primary/30 transition-shadow">
+                    <h3 class="text-2xl font-semibold text-primary mb-4 flex items-center"><i class="fas fa-certificate mr-3"></i>Certifications</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+                        <li>Diploma in Computer Engineering - Government Polytechnic College Purapuzha (2024)</li>
+                        <li>The Diploma in Computer Engineering gave me a strong foundation in programming, software development, computer systems, and networking. It covered essential subjects like Java, C, DBMS, operating systems, and web.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 px-6 md:px-12 container mx-auto">
+        <section id="contact" class="py-20 px-6 md:px-12 container mx-auto opacity-0 transform translate-y-10 animate-fade-in-section">
             <h2 class="text-4xl font-bold text-center mb-12 text-white">Contact <span class="text-primary">Me</span></h2>
             <div class="bg-cardbg p-8 rounded-lg shadow-xl max-w-2xl mx-auto">
+                <div class="mb-8 text-center">
+                    <p class="text-xl text-gray-300 mb-2 flex items-center justify-center">
+                        <i class="fas fa-envelope mr-3 text-primary"></i> <a href="mailto:albinsuresh64@gmail.com" class="hover:text-primary transition-colors">albinsuresh64@gmail.com</a>
+                    </p>
+                    <p class="text-xl text-gray-300 flex items-center justify-center">
+                        <i class="fas fa-phone mr-3 text-primary"></i> <a href="tel:+917902245966" class="hover:text-primary transition-colors">+91 7902245966</a>
+                    </p>
+                </div>
                 <form class="space-y-6">
                     <div>
                         <label for="name" class="block text-lg font-medium text-gray-200 mb-2">Name</label>
@@ -449,6 +552,52 @@
                 });
             });
         }
+
+        // Intersection Observer for scroll-triggered fade-in animations
+        const sections = document.querySelectorAll('.animate-fade-in-section');
+
+        const observerOptions = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the section is visible
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Stop observing once it's visible to prevent re-triggering
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Smooth scroll and visibility fix for navigation links (now simpler due to scroll-margin-top)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    // Set opacity to 1 immediately on click to ensure visibility
+                    targetElement.style.opacity = '1';
+                    targetElement.style.transform = 'translateY(0)';
+                    targetElement.classList.add('is-visible'); // Also add class for consistency
+
+                    // Scroll to the target element. scroll-margin-top in CSS handles the offset.
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
