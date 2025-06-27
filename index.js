@@ -8,11 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value.trim();
     const message = document.getElementById("message").value.trim();
 
-    // ✅ Console log BEFORE fetch
     console.log("Sending data:", { name, email, message });
 
     try {
-      const response = await fetch("http://localhost:8080/api/send-email", {
+      const response = await fetch("https://localhost:8080/api/send-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
